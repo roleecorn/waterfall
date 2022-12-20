@@ -1,0 +1,8 @@
+# 檔案名稱 .gitignore
+*.bat
+*.yml
+*.sqlite3
+*.db
+*.jpg
+*.png
+*.tmp
