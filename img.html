@@ -49,8 +49,9 @@
     <script>
 
         $(function () {
+            var path='/data/';
             dbs();
-            initImg();
+            initImg(path);
         });
         NID = 0;
         function initImg(path='/data/') {
@@ -87,7 +88,20 @@
             if (selectedValue == "none") {
                 return
             } else {
-                window.location.href = selectedValue;
+                // window.location.href = selectedValue;
+                path = "new";
+                // location.reload();
+                for (let i = 0; i < 4; i++) {
+                $('#container').children().eq(0).remove();
+                }
+                for (let i = 0; i < 4; i++) {
+                    var tag = document.createElement("div");
+                    tag.className = "item";
+                    tag.innerHTML = "第一行";
+                    $('#container').append(tag);
+                }
+                initImg('/data?dbs=111');
+
             }
         }
         
