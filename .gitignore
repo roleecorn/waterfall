@@ -3,6 +3,4 @@
 *.yml
 *.sqlite3
 *.db
-*.jpg
-*.png
 *.tmp

@@ -25,11 +25,7 @@
     <label for="input-select">選擇網站：</label>
     <select id="input-select" name="input" style="width: 800px" onchange="redirect()">
         <option value="none">    </option>
-        <!-- <option value="option2">選項2</option>
-        <option value="option3">選項3</option> -->
     </select>
-    <!-- <input type="button" value="連結名稱" onclick="location.href='要前往的網頁連結'"> -->
-
 
     <div>衣服</div>
     <div class="w" id="container">
@@ -57,10 +53,9 @@
             initImg();
         });
         NID = 0;
-        function initImg() {
+        function initImg(path='/data/') {
             $.ajax({
-                url: '/data/',
-                // url: {{{}}},
+                url: path,
                 type: 'GET',
                 data: { nid: NID },
                 dataType: 'JSON',
@@ -70,7 +65,7 @@
                     console.log(img_list);
                     var c=0;
                     $.each(img_list, function (index, v) {
-                        // {#    index, v，index是指的索引，v是指的内容        # }
+                        // index, v，index是指的索引，v是指的内容
                         var eqv = c % 4;
                         c=c+1;
                         var tag = document.createElement('img');
@@ -91,27 +86,14 @@
             console.log(selectedValue);
             if (selectedValue == "none") {
                 return
-                // window.location.href = "http://localhost:8000/";
             } else {
                 window.location.href = selectedValue;
             }
         }
-        function dbs() {
-            fetch('/dbs')
-                .then(response => response.json())
-                .then(data => {
-                    var cite_list = data.data;
-                    $.each(cite_list, function (index, v) {
-                        // {#    index, v，index是指的索引，v是指的内容        # }
-                        var tag = document.createElement('option');
-                        tag.text=v.name;
-                        tag.value=v.src;
-                        console.log(v.name);
-                        $('#input-select').append(tag);
-                    })
-                });
-        }
+        
     </script>
+    <!-- function dbs() -->
+    <script src="http://localhost:8000/html5up-phantom/assets/js/get_all_db.js"></script>
 </body>
 
 </html>
