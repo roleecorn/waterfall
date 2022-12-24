@@ -4,8 +4,8 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 app = FastAPI()  # 建立一個 Fast API application
-app.mount("/html5up-phantom",
-          StaticFiles(directory="html5up-phantom"), name="html5up-phantom")
+app.mount("/html5upphantom",
+          StaticFiles(directory="html5upphantom"), name="html5upphantom")
 
 
 @app.get("/")  # 指定 api 路徑 (get方法)
