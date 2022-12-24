@@ -1,5 +1,3 @@
-from typing import Optional
-import requests
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -34,9 +32,25 @@ def imgs(dbs: str = ""):
 
     data1 = {"src": "users1/2", "title": "main"}
     data2 = {"src": "users1/2"}
+    # html5upphantom/images/eddiebauer/women/Accessories/1.jpg
     if dbs == '111':
         data1 = {"src": "users1/2", "title": "111111111"}
     files = {"1": data1, "2": data2, "3": data1, "4": data2}
+    for i in range(1, 50):
+        files[str(i)] = {
+            "src": f"html5upphantom/images/eddiebauer/women/Accessories/{i}.jpg"}
+        files[str(i)]["title"] = "Accessories"
+        files[str(i)]["id"] = "women"
+    for i in range(50, 60):
+        files[str(i)] = {
+            "src": f"html5upphantom/images/eddiebauer/women/Bottoms/Capris/{i-49}.jpg"}
+        files[str(i)]["title"] = "Bottoms"
+        files[str(i)]["id"] = "women"
+    for i in range(60, 110):
+        files[str(i)] = {
+            "src": f"html5upphantom/images/eddiebauer/men/Bottoms/{i-59}.jpg"}
+        files[str(i)]["title"] = "Bottoms"
+        files[str(i)]["id"] = "men"
     ret = {
         'status': True,
         'data': files
