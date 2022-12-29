@@ -1,7 +1,6 @@
 function initImg() {
     $.ajax({
         url: '/data/',
-        // url: {{{}}},
         type: 'GET',
         data: { nid: NID },
         dataType: 'JSON',

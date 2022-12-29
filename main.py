@@ -33,9 +33,20 @@ def imgs(dbs: str = ""):
     data1 = {"src": "users1/2", "title": "main"}
     data2 = {"src": "users1/2"}
     # html5upphantom/images/eddiebauer/women/Accessories/1.jpg
-    if dbs == '111':
-        data1 = {"src": "users1/2", "title": "111111111"}
     files = {"1": data1, "2": data2, "3": data1, "4": data2}
+    if dbs == '111':
+        for i in range(1, 50):
+            files[str(i)] = {
+            "src": f"html5upphantom/images/eddiebauer/men/Bottoms/{i}.jpg"}
+            files[str(i)]["title"] = "Bottoms"
+            files[str(i)]["id"] = "men"
+        ret = {
+        'status': True,
+        'data': files
+        }
+    # if dbs=="111":
+
+        return JSONResponse(ret)
     for i in range(1, 50):
         files[str(i)] = {
             "src": f"html5upphantom/images/eddiebauer/women/Accessories/{i}.jpg"}
@@ -55,16 +66,17 @@ def imgs(dbs: str = ""):
         'status': True,
         'data': files
     }
+    # if dbs=="111":
+
     return JSONResponse(ret)
 
 
 @app.get("/dbs")
 def dbs():
-    # src=src.replace(".","/")
-    # src+=".jpg"
 
-    data1 = {"name": "eby", "src": "http://localhost:8000/test"}
-    data2 = {"name": "amz", "src": "http://localhost:8000/"}
+
+    data1 = {"name": "eby", "src": "111"}
+    data2 = {"name": "amz", "src": "222"}
     files = {"1": data1, "2": data2}
     ret = {
         'status': True,
