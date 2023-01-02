@@ -1,27 +1,24 @@
-function initImg() {
-    $.ajax({
-        url: '/data/',
-        type: 'GET',
-        data: { nid: NID },
-        dataType: 'JSON',
-        success: function (arg) {
-
-            var img_list = JSON.parse(arg).data;
-            console.log(img_list);
-            var c=0;
-            $.each(img_list, function (index, v) {
-                // {#    index, v，index是指的索引，v是指的内容        # }
-                var eqv = c % 4;
-                c=c+1;
-                var tag = document.createElement('img');
-                tag.src = "http://localhost:8000/" + v.src;
-                var word = document.createElement('div');
-                word.textContent = v.title + "," + v.id;
-                
-                $('#container').children().eq(eqv).append(tag).append(word);
-            })
-
+function initImg(path = '/data/') {
+    fetch(path, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
         }
 
     })
+        .then(response => response.json())
+        .then(response => {
+            var img_list = response.data;
+            var c = 0;
+            Object.values(img_list).forEach(v => {
+                var eqv = c % 4;
+                c = c + 1;
+                var tag = document.createElement('img');
+                tag.src = "../" + v.src;
+                var word = document.createElement('div');
+                word.textContent = v.title + "," + v.id;
+                $('#container').children().eq(eqv).append(tag).append(word);
+            });
+        })
+        .catch(error => console.error(error));
 }

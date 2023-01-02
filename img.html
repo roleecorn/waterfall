@@ -19,12 +19,18 @@
             width: 100%;
         }
     </style>
+    <!-- function dbs() -->
+    <script src="../html5upphantom/assets/js/get_all_db.js"></script>
+    <script language="JavaScript" type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.2.6/jquery.min.js">
+        </script>
+    <script src="../html5upphantom/assets/js/initImg.js"></script>
 </head>
 
 <body>
     <label for="input-select">選擇網站：</label>
     <select id="input-select" name="input" style="width: 800px" onchange="redirect()">
-        <option value="none">    </option>
+        <option value="none"> </option>
     </select>
 
     <div>衣服</div>
@@ -42,44 +48,16 @@
 
         </div>
     </div>
-    <script language="JavaScript" type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.2.6/jquery.min.js">
-        </script>
+
 
     <script>
 
         $(function () {
-            var path='/data/';
+            var path = '/data/';
             dbs();
             initImg(path);
         });
         NID = 0;
-        function initImg(path='/data/') {
-            $.ajax({
-                url: path,
-                type: 'GET',
-                data: { nid: NID },
-                dataType: 'JSON',
-                success: function (arg) {
-
-                    var img_list = JSON.parse(arg).data;
-                    var c=0;
-                    $.each(img_list, function (index, v) {
-                        // index, v，index是指的索引，v是指的内容
-                        var eqv = c % 4;
-                        c=c+1;
-                        var tag = document.createElement('img');
-                        tag.src = "../" + v.src;
-                        var word = document.createElement('div');
-                        word.textContent = v.title + "," + v.id;
-                        
-                        $('#container').children().eq(eqv).append(tag).append(word);
-                    })
-
-                }
-
-            })
-        }
         function redirect() {
             var select = document.getElementById("input-select");
             var selectedValue = select.options[select.selectedIndex].value;
@@ -90,7 +68,7 @@
                 path = "new";
                 // location.reload();
                 for (let i = 0; i < 4; i++) {
-                $('#container').children().eq(0).remove();
+                    $('#container').children().eq(0).remove();
                 }
                 for (let i = 0; i < 4; i++) {
                     var tag = document.createElement("div");
@@ -99,15 +77,15 @@
                     $('#container').append(tag);
                 }
                 console.log(selectedValue);
-                got="/data?dbs="+selectedValue
+                got = "/data?dbs=" + selectedValue
                 initImg(got);
 
             }
         }
-        
+
     </script>
     <!-- function dbs() -->
-    <script src="../html5upphantom/assets/js/get_all_db.js"></script>
+    <!-- <script src="../html5upphantom/assets/js/get_all_db.js"></script> -->
 </body>
 
 </html>
