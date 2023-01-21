@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 import sqlite3
+import pandas as pd
 app = FastAPI()  # 建立一個 Fast API application
 app.mount("/html5upphantom",
           StaticFiles(directory="html5upphantom"), name="html5upphantom")
@@ -82,5 +83,23 @@ def dbs():
     ret = {
         'status': True,
         'data': files
+    }
+    return JSONResponse(ret)
+
+@app.get("/ttttest")
+def imgs(dbs: str = ""):
+    status = sqlite3.connect("eddiebauer.db")
+    qry = f"SELECT * FROM eddiebauer "
+    df = pd.read_sql_query(qry, status)
+    result = df.to_dict('records')
+    status.close()
+    tmp=0
+    sol={}
+    for item in result:
+        sol[str(tmp)]=item
+        tmp+=1
+    ret = {
+        'status': True,
+        'data': sol
     }
     return JSONResponse(ret)
