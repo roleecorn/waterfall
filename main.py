@@ -19,7 +19,11 @@ def showwaterfall(data: str = ""):
     f = open("img.html", mode="r", encoding="utf8").read()
 
     return HTMLResponse(content=f, status_code=200)
+@app.get("/test2")
+def showwaterfall(data: str = ""):
+    f = open("img2.html", mode="r", encoding="utf8").read()
 
+    return HTMLResponse(content=f, status_code=200)
 
 # @app.get("/users1/{src}")
 # async def aimg(src: str):

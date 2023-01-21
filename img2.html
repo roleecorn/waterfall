@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>waterflow</title>
+    <style>
+        .w {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .item {
+            width: 25%;
+            float: left;
+        }
+
+        .item img {
+            width: 100%;
+        }
+    </style>
+    <!-- 取得所有網站列表 -->
+    <script src="../html5upphantom/assets/js/get_all_db.js"></script>
+    <script language="JavaScript" type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.2.6/jquery.min.js">
+        </script>
+    <!-- 取得圖片 -->
+    <!-- <script src="../html5upphantom/assets/js/initImg.js"></script> -->
+
+    <!-- http://localhost:8000/html5upphantom/images/eddiebauer/women/WomensNewArrivals/D0093889_481C1 -->
+    <!-- ../html5upphantom/images/eddiebauer/women/Accessories/4.jpg -->
+    <script>
+    function initImg(path = '/data/') {
+        fetch(path, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+    
+        })
+            .then(response => response.json())
+            .then(response => {
+                var img_list = response.data;
+                var c = 0;
+                Object.values(img_list).forEach(v => {
+                    var eqv = c % 4;
+                    c = c + 1;
+                    var tag = document.createElement('img');
+                    tag.src = "../html5upphantom/images/eddiebauer/" + v.path+'/' +v.imgcode+'.jpg';
+                    var word = document.createElement('div');
+                    word.textContent = v.name + "," + v.id+ v.price;
+                    $('#container').children().eq(eqv).append(tag).append(word);
+                });
+            })
+            .catch(error => console.error(error));
+    }</script>
+</head>
+
+<body>
+    <label for="input-select">選擇網站：</label>
+    <select id="input-select" name="input" style="width: 800px" onchange="redirect()">
+        <option value="none"> </option>
+    </select>
+
+    <div>衣服</div>
+    <div class="w" id="container">
+
+        <div class="item">第一行
+        </div>
+        <div class="item">第二行
+
+        </div>
+        <div class="item">第三行
+            <img src="../users1/1"></img>
+        </div>
+        <div class="item">第四行
+
+        </div>
+    </div>
+
+
+    <script>
+
+        $(function () {
+            var path = '/ttttest/';
+            dbs();
+            initImg(path);
+        });
+        NID = 0;
+        // 重新導向，移除所有的圖片並重新取得，dbs會重新拿參數
+        function redirect() {
+            var select = document.getElementById("input-select");
+            var selectedValue = select.options[select.selectedIndex].value;
+            if (selectedValue == "none") {
+                return
+            } else {
+                path = "new";
+                for (let i = 0; i < 4; i++) {
+                    $('#container').children().eq(0).remove();
+                }
+                for (let i = 0; i < 4; i++) {
+                    var tag = document.createElement("div");
+                    tag.className = "item";
+                    tag.innerHTML = "第一行";
+                    $('#container').append(tag);
+                }
+                console.log(selectedValue);
+                got = "/data?dbs=" + selectedValue
+                initImg(got);
+
+            }
+        }
+
+    </script>
+</body>
+
+</html>
