@@ -34,7 +34,6 @@ def imgs(dbs: str = ""):
 
     data1 = {"src": "users1/2", "title": "main"}
     data2 = {"src": "users1/2"}
-    # html5upphantom/images/eddiebauer/women/Accessories/1.jpg
     files = {"1": data1, "2": data2, "3": data1, "4": data2}
     if dbs == '111':
         for i in range(1, 50):
@@ -46,7 +45,6 @@ def imgs(dbs: str = ""):
         'status': True,
         'data': files
         }
-    # if dbs=="111":
 
         return JSONResponse(ret)
     for i in range(1, 50):
@@ -68,7 +66,6 @@ def imgs(dbs: str = ""):
         'status': True,
         'data': files
     }
-    # if dbs=="111":
 
     return JSONResponse(ret)
 
