@@ -78,9 +78,10 @@ def imgs(dbs: str = ""):
 def dbs():
 
 
-    data1 = {"name": "eby", "src": "111"}
-    data2 = {"name": "amz", "src": "222"}
-    files = {"1": data1, "2": data2}
+    data1 = {"name": "bottom", "src": "bottom"}
+    data2 = {"name": "Shirts", "src": "Shirts"}
+    data3 = {"name": "men", "src": "men"}
+    files = {"1": data1, "2": data2,"3": data3}
     ret = {
         'status': True,
         'data': files
@@ -92,6 +93,8 @@ def imgs(dbs: str = ""):
     status = sqlite3.connect("eddiebauer.db")
     qry = f"SELECT * FROM eddiebauer "
     df = pd.read_sql_query(qry, status)
+    df = df[~df['path'].str.contains(dbs, na=False)]
+    print(dbs)
     result = df.to_dict('records')
     status.close()
     tmp=0

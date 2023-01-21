@@ -24,36 +24,44 @@
     <script language="JavaScript" type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.2.6/jquery.min.js">
         </script>
-    <!-- 取得圖片 -->
-    <!-- <script src="../html5upphantom/assets/js/initImg.js"></script> -->
 
-    <!-- http://localhost:8000/html5upphantom/images/eddiebauer/women/WomensNewArrivals/D0093889_481C1 -->
-    <!-- ../html5upphantom/images/eddiebauer/women/Accessories/4.jpg -->
     <script>
-    function initImg(path = '/data/') {
-        fetch(path, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-    
-        })
-            .then(response => response.json())
-            .then(response => {
-                var img_list = response.data;
-                var c = 0;
-                Object.values(img_list).forEach(v => {
-                    var eqv = c % 4;
-                    c = c + 1;
-                    var tag = document.createElement('img');
-                    tag.src = "../html5upphantom/images/eddiebauer/" + v.path+'/' +v.imgcode+'.jpg';
-                    var word = document.createElement('div');
-                    word.textContent = v.name + "," + v.id+ v.price;
-                    $('#container').children().eq(eqv).append(tag).append(word);
-                });
+        function initImg(path = '/data/') {
+            fetch(path, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
             })
-            .catch(error => console.error(error));
-    }</script>
+                .then(response => response.json())
+                .then(response => {
+                    var img_list = response.data;
+                    var c = 0;
+                    Object.values(img_list).forEach(v => {
+                        var eqv = c % 4;
+                        c = c + 1;
+                        var tag = document.createElement('img');
+                        tag.src = "../html5upphantom/images/eddiebauer/" + v.path + '/' + v.imgcode + '.jpg';
+                        var word = document.createElement('div');
+                        word.style = 'white-space: pre-line;'
+                        word.innerHTML = '品名: ' + v.name + '<br>';
+                        word.innerHTML += '金額: ' + v.price + '<br>';
+                        
+                        if (v.gender === 0) {
+                            tmp = 'Female';
+                        }
+                        if (v.gender === 1) {
+                            tmp = 'Male';
+                        }
+                        word.innerHTML += '性別: ' + tmp  + '<br>';
+                        // word.textContent = word.textContent + '性別: ' + tmp
+                        //  + ","  + v.price;
+                        $('#container').children().eq(eqv).append(tag).append(word);
+                    });
+                })
+                .catch(error => console.error(error));
+        }</script>
 </head>
 
 <body>
@@ -105,7 +113,8 @@
                     $('#container').append(tag);
                 }
                 console.log(selectedValue);
-                got = "/data?dbs=" + selectedValue
+                got = "/ttttest?dbs=" + selectedValue
+                console.log(got)
                 initImg(got);
 
             }
