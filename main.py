@@ -91,9 +91,15 @@ def dbs():
 @app.get("/ttttest")
 def imgs(dbs: str = ""):
     status = sqlite3.connect("eddiebauer.db")
-    qry = f"SELECT * FROM eddiebauer "
+    if not dbs:
+        qry = f"SELECT * FROM eddiebauer "
+    else :
+        qry = f'''
+    SELECT * FROM eddiebauer  WHERE path LIKE '%{dbs}%';
+    '''
+        print(qry)
     df = pd.read_sql_query(qry, status)
-    df = df[~df['path'].str.contains(dbs, na=False)]
+    # df = df[~df['path'].str.contains(dbs, na=False)]
     print(dbs)
     result = df.to_dict('records')
     status.close()
