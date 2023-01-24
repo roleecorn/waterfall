@@ -69,6 +69,10 @@
     <select id="input-select" name="input" style="width: 800px" onchange="redirect()">
         <option value="none"> </option>
     </select>
+    <form>
+        <input type="text" id="search_input" placeholder="輸入文字">
+        <button type="button" onclick="search()">搜尋</button>
+      </form>
 
     <div>衣服</div>
     <div class="w" id="container">
@@ -118,6 +122,22 @@
                 initImg(got);
 
             }
+        }
+        function search(){
+            var search_text = document.getElementById("search_input").value;
+            console.log(search_text);
+            for (let i = 0; i < 4; i++) {
+                    $('#container').children().eq(0).remove();
+                }
+                for (let i = 0; i < 4; i++) {
+                    var tag = document.createElement("div");
+                    tag.className = "item";
+                    tag.innerHTML = "第一行";
+                    $('#container').append(tag);
+                }
+                got = "/ttttest?dbs=" + search_text
+                console.log(got)
+                initImg(got);
         }
 
     </script>
