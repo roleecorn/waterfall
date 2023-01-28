@@ -76,8 +76,6 @@ def imgs(dbs: str = ""):
 
 @app.get("/dbs")
 def dbs():
-
-
     data1 = {"name": "bottom", "src": "bottom"}
     data2 = {"name": "Shirts", "src": "Shirts"}
     data3 = {"name": "men", "src": "men"}
@@ -89,18 +87,22 @@ def dbs():
     return JSONResponse(ret)
 
 @app.get("/ttttest")
-def imgs(dbs: str = ""):
+def imgs(dbs: str = "",feature:str="",name:str=""):
     status = sqlite3.connect("eddiebauer.db")
-    if not dbs:
-        qry = f"SELECT * FROM eddiebauer "
-    else :
+    if name:
         qry = f'''
-    SELECT * FROM eddiebauer  WHERE path LIKE '%{dbs}%';
-    '''
-        print(qry)
+        SELECT * FROM eddiebauer  WHERE name LIKE '%{name}%';
+        '''
+    elif  feature :
+        qry = f'''
+        SELECT * FROM eddiebauer  WHERE path LIKE '%{feature}%';
+        '''
+    else :
+        qry = f"SELECT * FROM eddiebauer "
+        
+    print(qry)
     df = pd.read_sql_query(qry, status)
     # df = df[~df['path'].str.contains(dbs, na=False)]
-    print(dbs)
     result = df.to_dict('records')
     status.close()
     tmp=0

@@ -65,12 +65,13 @@
 </head>
 
 <body>
-    <label for="input-select">選擇網站：</label>
+    <label for="input-select">選擇特徵：</label>
     <select id="input-select" name="input" style="width: 800px" onchange="redirect()">
         <option value="none"> </option>
-    </select>
+    </select><br>
     <form>
-        <input type="text" id="search_input" placeholder="輸入文字">
+        <label for="input-select">名稱搜尋：</label>
+        <input type="text" id="search_input" style="width: 800px" placeholder="輸入文字">
         <button type="button" onclick="search()">搜尋</button>
       </form>
 
@@ -117,7 +118,7 @@
                     $('#container').append(tag);
                 }
                 console.log(selectedValue);
-                got = "/ttttest?dbs=" + selectedValue
+                got = "/ttttest?feature=" + selectedValue
                 console.log(got)
                 initImg(got);
 
@@ -135,7 +136,7 @@
                     tag.innerHTML = "第一行";
                     $('#container').append(tag);
                 }
-                got = "/ttttest?dbs=" + search_text
+                got = "/ttttest?name=" + search_text
                 console.log(got)
                 initImg(got);
         }
