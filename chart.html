@@ -1,30 +1,46 @@
 <!DOCTYPE html>
-<head>
-      <!-- Chart.js v2.4.0 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
+<head>
+    <!-- Chart.js v2.4.0 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script>
+        function chart(ctx,path = '/chart') {
+            fetch(path)
+                .then(response => response.json())
+                .then(c_data => {
+                    c_data = c_data.data;
+                    var example = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: c_data.labels,
+                            datasets: [
+                                {
+                                    label: c_data.datasetLabel,
+                                    data: c_data.data,
+                                    backgroundColor: c_data.backgroundColor,
+                                    borderWidth: c_data.borderWidth
+                                }
+                            ]
+                        }
+                    });
+
+                })
+                .catch(error => {
+                    console.error("Error fetching chart data:", error);
+                });
+
+        }
+
+
+    </script>
 </head>
+
 <body>
     <div style="width:30%"><canvas id="example" width="400" height="200"></canvas></div>
     <script>
-        var ctx = document.getElementById( "example" ),
-            example = new Chart(ctx, {
-                // 參數設定[註1]
-                // type: "pie",
-                type: "bar", // 圖表類型
-                data: {
-                    labels: [ "Red", "Green", "Blue" ], // 標題
-                    datasets: [{
-                        label: "# of Votes", // 標籤
-                        data: [ 12, 19, 3 ], // 資料
-                        backgroundColor: [ // 背景色
-                        "#FF0000",
-                        "#00FF00",
-                        "#0000FF",
-                        ],
-                        borderWidth: 1 // 外框寬度
-                    }]
-                }
-            });
+        var ctx = document.getElementById("example");
+        chart(ctx);
+    
+
     </script>
 </body>

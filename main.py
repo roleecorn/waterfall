@@ -13,65 +13,11 @@ def read_root():
     f = open("home.html", mode="r", encoding="utf8").read()
     return HTMLResponse(content=f, status_code=200)
 
-
-@app.get("/test")
-def showwaterfall(data: str = ""):
-    f = open("img.html", mode="r", encoding="utf8").read()
-
-    return HTMLResponse(content=f, status_code=200)
 @app.get("/test2")
 def showwaterfall(data: str = ""):
     f = open("img2.html", mode="r", encoding="utf8").read()
 
     return HTMLResponse(content=f, status_code=200)
-
-# @app.get("/users1/{src}")
-# async def aimg(src: str):
-#     src=src.replace(".","/")
-#     src+=".jpg"
-
-#     return FileResponse("image/2.jpg")
-
-
-@app.get("/data")
-def imgs(dbs: str = ""):
-
-    data1 = {"src": "users1/2", "title": "main"}
-    data2 = {"src": "users1/2"}
-    files = {"1": data1, "2": data2, "3": data1, "4": data2}
-    if dbs == '111':
-        for i in range(1, 50):
-            files[str(i)] = {
-            "src": f"html5upphantom/images/eddiebauer/men/Bottoms/{i}.jpg"}
-            files[str(i)]["title"] = "Bottoms"
-            files[str(i)]["id"] = "men"
-        ret = {
-        'status': True,
-        'data': files
-        }
-
-        return JSONResponse(ret)
-    for i in range(1, 50):
-        files[str(i)] = {
-            "src": f"html5upphantom/images/eddiebauer/women/Accessories/{i}.jpg"}
-        files[str(i)]["title"] = "Accessories"
-        files[str(i)]["id"] = "women"
-    for i in range(50, 60):
-        files[str(i)] = {
-            "src": f"html5upphantom/images/eddiebauer/women/Bottoms/Capris/{i-49}.jpg"}
-        files[str(i)]["title"] = "Bottoms"
-        files[str(i)]["id"] = "women"
-    for i in range(60, 110):
-        files[str(i)] = {
-            "src": f"html5upphantom/images/eddiebauer/men/Bottoms/{i-59}.jpg"}
-        files[str(i)]["title"] = "Bottoms"
-        files[str(i)]["id"] = "men"
-    ret = {
-        'status': True,
-        'data': files
-    }
-
-    return JSONResponse(ret)
 
 
 @app.get("/dbs")
@@ -115,3 +61,24 @@ def imgs(dbs: str = "",feature:str="",name:str=""):
         'data': sol
     }
     return JSONResponse(ret)
+
+@app.get("/chart")
+def chart():
+
+    chart_={
+        'labels': ["Red", "Green", "Blue"],
+        'datasetLabel': "# of Votes",
+        'data': [12, 19, 3],
+        'backgroundColor': ["#FF0000", "#00FF00", "#0000FF"],
+        'borderWidth': 1
+    }
+    ret = {
+        'status': True,
+        'data': chart_
+    }
+    return JSONResponse(ret)
+@app.get("/test")
+def showwaterfall(data: str = ""):
+    f = open("chart.html", mode="r", encoding="utf8").read()
+
+    return HTMLResponse(content=f, status_code=200)

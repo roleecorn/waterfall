@@ -1,4 +1,4 @@
-function initImg(path = '/data/') {
+function initImg(path = '/ttttest/') {
     fetch(path, {
         method: 'GET',
         headers: {
