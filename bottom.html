@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<head>
+
+</head>
+
+<body>
+    <div id="searches">
+        <input type="text" class="input-field">
+    </div>
+    <button id="add-button">Add</button>
+    <button id="remove-button">Remove</button>
+    <button id="go-search-button">Go Search</button>
+    <script>
+        const addButton = document.getElementById('add-button');
+        const removeButton = document.getElementById('remove-button');
+        const goSearchButton = document.getElementById('go-search-button');
+        const searchesDiv = document.getElementById('searches');
+        addButton.addEventListener('click', function () {
+            const newInputField = document.createElement('input');
+            newInputField.type = 'text';
+            newInputField.className = 'input-field';
+            searchesDiv.appendChild(newInputField);
+        });
+
+        removeButton.addEventListener('click', function () {
+            const inputFields = document.getElementsByClassName('input-field');
+            if (inputFields.length > 1) {
+                searchesDiv.removeChild(inputFields[inputFields.length - 1]);
+            }
+        });
+        goSearchButton.addEventListener('click', function () {
+            const inputFields = document.getElementsByClassName('input-field');
+            let searchTerms = '';
+            for (let i = 0; i < inputFields.length; i++) {
+                searchTerms += inputFields[i].value + ' ';
+            }
+            console.log(searchTerms);
+        });
+    </script>
+</body>
