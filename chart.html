@@ -33,7 +33,6 @@
         }
     </script>
     <style>
-
         .w {
             width: 80%;
             margin: 0 auto;
@@ -94,15 +93,35 @@
         });
 
         goSearchButton.addEventListener('click', function () {
-            const searchBlocks = document.getElementsByClassName('search-block');
-            let searchTerms = '';
-            for (let i = 0; i < searchBlocks.length; i++) {
-                const searchType = searchBlocks[i].getElementsByClassName('search-type')[0];
-                const inputField = searchBlocks[i].getElementsByClassName('input-field')[0];
-                searchTerms += searchType.value + ': ' + inputField.value + '\n';
+            const data = {};
+            var inputFields = document.getElementsByClassName('search-block');
+            var searchTypes = [];
+            var inputs = [];
+            for (var i = 0; i < inputFields.length; i++) {
+                searchTypes.push(inputFields[i].getElementsByClassName('search-type')[0].value);
+                inputs.push(inputFields[i].getElementsByClassName('input-field')[0].value);
             }
-            console.log(searchTerms);
-            chart(chartbox);
+            console.log(searchTypes);
+            console.log(inputs);
+            chart(container);
+
+            fetch("/search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "searchTypes": searchTypes,
+                    "inputs": inputs
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error("Error sending search request:", error);
+                });
         });
 
     </script>

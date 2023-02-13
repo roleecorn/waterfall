@@ -13,14 +13,16 @@ def read_root():
     f = open("home.html", mode="r", encoding="utf8").read()
     return HTMLResponse(content=f, status_code=200)
 
+
 @app.get("/test")
 def showwaterfall(data: str = ""):
     f = open("chart.html", mode="r", encoding="utf8").read()
 
     return HTMLResponse(content=f, status_code=200)
 
+
 @app.get("/test2")
-def showwaterfall(data: str = ""):
+def showchart(data: str = ""):
     f = open("img2.html", mode="r", encoding="utf8").read()
 
     return HTMLResponse(content=f, status_code=200)
@@ -31,60 +33,62 @@ def dbs():
     data1 = {"name": "bottom", "src": "bottom"}
     data2 = {"name": "Shirts", "src": "Shirts"}
     data3 = {"name": "men", "src": "men"}
-    files = {"1": data1, "2": data2,"3": data3}
+    files = {"1": data1, "2": data2, "3": data3}
     ret = {
         'status': True,
         'data': files
     }
     return JSONResponse(ret)
 
+
 @app.get("/ttttest")
-def imgs(dbs: str = "",feature:str="",name:str=""):
+def imgs(dbs: str = "", feature: str = "", name: str = ""):
     status = sqlite3.connect("eddiebauer.db")
     if name:
         qry = f'''
         SELECT * FROM eddiebauer  WHERE name LIKE '%{name}%';
         '''
-    elif  feature :
+    elif feature:
         qry = f'''
         SELECT * FROM eddiebauer  WHERE path LIKE '%{feature}%';
         '''
-    else :
-        qry = f"SELECT * FROM eddiebauer "
-        
+    else:
+        qry = "SELECT * FROM eddiebauer "
+
     print(qry)
     df = pd.read_sql_query(qry, status)
     result = df.to_dict('records')
     status.close()
-    tmp=0
-    sol={}
+    tmp = 0
+    sol = {}
     for item in result:
-        sol[str(tmp)]=item
-        tmp+=1
+        sol[str(tmp)] = item
+        tmp += 1
     ret = {
         'status': True,
         'data': sol
     }
     return JSONResponse(ret)
 
+
 @app.get("/chart")
 def chart():
-    data=[12, 19, 3,1]
-    labels=["Red", "Green", "Blue","test"]
+    data = [12, 19, 3, 1]
+    labels = ["Red", "Green", "Blue", "test"]
     colors = [
-    "#1f77b4",
-    "#ff7f0e",
-    "#2ca02c",
-    "#d62728",
-    "#9467bd",
-    "#8c564b",
-    "#e377c2",
-    "#7f7f7f",
-    "#bcbd22",
-    "#17becf"
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c",
+        "#d62728",
+        "#9467bd",
+        "#8c564b",
+        "#e377c2",
+        "#7f7f7f",
+        "#bcbd22",
+        "#17becf"
     ]
-    color=colors[:len(data)]
-    chart_={
+    color = colors[:len(data)]
+    chart_ = {
         'labels': labels,
         'datasetLabel': "mychart",
         'data': data,
@@ -97,8 +101,9 @@ def chart():
     }
     return JSONResponse(ret)
 
+
 @app.get("/count_test")
-def count_test(search:str):
+def count_test(search: str):
     conn = sqlite3.connect("eddiebauer.db")
     cursor = conn.cursor()
 
@@ -111,4 +116,38 @@ def count_test(search:str):
         'data': result
     }
 
+    return JSONResponse(ret)
+
+
+@app.post("/search")
+async def search(data: dict):
+    print(data)
+    print(data['searchTypes'])
+    print(data['inputs'])
+    data = [12, 3, 1]
+    labels = ["Red", "Blue", "test"]
+    colors = [
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c",
+        "#d62728",
+        "#9467bd",
+        "#8c564b",
+        "#e377c2",
+        "#7f7f7f",
+        "#bcbd22",
+        "#17becf"
+    ]
+    color = colors[:len(data)]
+    chart_ = {
+        'labels': labels,
+        'datasetLabel': "mychart",
+        'data': data,
+        'backgroundColor': color,
+        'borderWidth': 1
+    }
+    ret = {
+        'status': True,
+        'data': chart_
+    }
     return JSONResponse(ret)
