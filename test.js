@@ -25,7 +25,7 @@ function chart(container, path = '/chart') {
             console.error("Error fetching chart data:", error);
         });
 }
-function search() {
+function search(container) {
     fetch("/search", {
         method: "POST",
         headers: {

@@ -121,11 +121,6 @@ def count_test(search: str):
 
 @app.post("/search")
 async def search(data: dict):
-    print(data)
-    print(data['searchTypes'])
-    print(data['inputs'])
-    data = [12, 3, 1]
-    labels = ["Red", "Blue", "test"]
     colors = [
         "#1f77b4",
         "#ff7f0e",
@@ -140,9 +135,9 @@ async def search(data: dict):
     ]
     color = colors[:len(data)]
     chart_ = {
-        'labels': labels,
+        'labels': data['searchTypes'],
         'datasetLabel': "mychart",
-        'data': data,
+        'data': data['inputs'],
         'backgroundColor': color,
         'borderWidth': 1
     }
