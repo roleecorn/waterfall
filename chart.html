@@ -4,12 +4,15 @@
     <!-- Chart.js v2.4.0 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script>
-        function chart(ctx, path = '/chart') {
+        function chart(container, path = '/chart') {
             fetch(path)
                 .then(response => response.json())
                 .then(c_data => {
                     c_data = c_data.data;
-                    var example = new Chart(ctx, {
+                    var canvas = document.createElement("canvas");
+                    canvas.className = "item";
+                    container.appendChild(canvas);
+                    var example = new Chart(canvas.getContext("2d"), {
                         type: "bar",
                         data: {
                             labels: c_data.labels,
@@ -23,16 +26,24 @@
                             ]
                         }
                     });
-
                 })
                 .catch(error => {
                     console.error("Error fetching chart data:", error);
                 });
+        }
+    </script>
+    <style>
 
+        .w {
+            width: 80%;
+            margin: 0 auto;
         }
 
-
-    </script>
+        .item {
+            width: 25%;
+            float: left;
+        }
+    </style>
 </head>
 
 <body>
@@ -49,10 +60,10 @@
     <button id="add-button">Add</button>
     <button id="remove-button">Remove</button>
     <button id="go-search-button">Go Search</button>
-    <div style="width:30%"><canvas id="example" width="400" height="200"></canvas></div>
+    <div class="w" id="container"></div>
     <script>
-        var ctx = document.getElementById("example");
-        chart(ctx);
+        const chartbox = document.getElementById("container");
+        chart(chartbox);
         const addButton = document.getElementById('add-button');
         const removeButton = document.getElementById('remove-button');
         const goSearchButton = document.getElementById('go-search-button');
@@ -91,6 +102,7 @@
                 searchTerms += searchType.value + ': ' + inputField.value + '\n';
             }
             console.log(searchTerms);
+            chart(chartbox);
         });
 
     </script>
