@@ -4,7 +4,7 @@
     <!-- Chart.js v2.4.0 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script>
-        function chart(ctx,path = '/chart') {
+        function chart(ctx, path = '/chart') {
             fetch(path)
                 .then(response => response.json())
                 .then(c_data => {
@@ -36,11 +36,62 @@
 </head>
 
 <body>
+    <div id="searches">
+        <div class="search-block">
+            <select class="search-type">
+                <option value="name">Name</option>
+                <option value="cost">Cost</option>
+                <option value="feature">Feature</option>
+            </select>
+            <input type="text" class="input-field">
+        </div>
+    </div>
+    <button id="add-button">Add</button>
+    <button id="remove-button">Remove</button>
+    <button id="go-search-button">Go Search</button>
     <div style="width:30%"><canvas id="example" width="400" height="200"></canvas></div>
     <script>
         var ctx = document.getElementById("example");
         chart(ctx);
-    
+        const addButton = document.getElementById('add-button');
+        const removeButton = document.getElementById('remove-button');
+        const goSearchButton = document.getElementById('go-search-button');
+        const searchesDiv = document.getElementById('searches');
+
+        addButton.addEventListener('click', function () {
+            const searchBlock = document.createElement('div');
+            searchBlock.className = 'search-block';
+
+            const searchType = document.createElement('select');
+            searchType.className = 'search-type';
+            searchType.innerHTML = '<option value="name">Name</option><option value="cost">Cost</option><option value="feature">Feature</option>';
+            searchBlock.appendChild(searchType);
+
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.className = 'input-field';
+            searchBlock.appendChild(inputField);
+
+            searchesDiv.appendChild(searchBlock);
+        });
+
+        removeButton.addEventListener('click', function () {
+            const searchBlocks = document.getElementsByClassName('search-block');
+            if (searchBlocks.length > 1) {
+                searchesDiv.removeChild(searchBlocks[searchBlocks.length - 1]);
+            }
+        });
+
+        goSearchButton.addEventListener('click', function () {
+            const searchBlocks = document.getElementsByClassName('search-block');
+            let searchTerms = '';
+            for (let i = 0; i < searchBlocks.length; i++) {
+                const searchType = searchBlocks[i].getElementsByClassName('search-type')[0];
+                const inputField = searchBlocks[i].getElementsByClassName('input-field')[0];
+                searchTerms += searchType.value + ': ' + inputField.value + '\n';
+            }
+            console.log(searchTerms);
+        });
 
     </script>
 </body>
