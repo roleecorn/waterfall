@@ -133,11 +133,20 @@ async def search(data: dict):
         "#bcbd22",
         "#17becf"
     ]
+    print(data)
+    conn = sqlite3.connect("eddiebauer.db")
+    cursor = conn.cursor()
+    search_res=[]
+    for i in range(len(data)):
+        query = f"SELECT COUNT(*) FROM eddiebauer WHERE {data['searchTypes'][i]} LIKE '%{data['inputs'][i]}%'"
+        cursor.execute(query)
+        search_res.append(cursor.fetchone())
+    conn.close()
     color = colors[:len(data)]
     chart_ = {
         'labels': data['searchTypes'],
         'datasetLabel': "mychart",
-        'data': data['inputs'],
+        'data': search_res,
         'backgroundColor': color,
         'borderWidth': 1
     }
