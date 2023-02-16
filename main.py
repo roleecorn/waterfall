@@ -155,7 +155,9 @@ async def search(data: dict):
         'datasetLabel': "mychart",
         'data': search_res,
         'backgroundColor': color,
-        'borderWidth': 1
+        'borderWidth': 1,
+        'scales_min' : 0,
+        'scales_max' :max(search_res)
     }
     ret = {
         'status': True,
