@@ -1,4 +1,4 @@
-function initImg(path = '/ttttest/') {
+function initImg(path = '/search_img/') {
     fetch(path, {
         method: 'GET',
         headers: {

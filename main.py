@@ -41,7 +41,7 @@ def dbs():
     return JSONResponse(ret)
 
 
-@app.get("/ttttest")
+@app.get("/search_img")
 def imgs(dbs: str = "", feature: str = "", name: str = ""):
     status = sqlite3.connect("eddiebauer.db")
     if name:
@@ -55,7 +55,6 @@ def imgs(dbs: str = "", feature: str = "", name: str = ""):
     else:
         qry = "SELECT * FROM eddiebauer "
 
-    print(qry)
     df = pd.read_sql_query(qry, status)
     result = df.to_dict('records')
     status.close()
@@ -133,16 +132,24 @@ async def search(data: dict):
         "#bcbd22",
         "#17becf"
     ]
-    print(data)
     conn = sqlite3.connect("eddiebauer.db")
     cursor = conn.cursor()
     search_res=[]
-    for i in range(len(data)):
-        query = f"SELECT COUNT(*) FROM eddiebauer WHERE {data['searchTypes'][i]} LIKE '%{data['inputs'][i]}%'"
+    for i in range(len(data['inputs'])):
+        if data['searchTypes'][i]=="cost":
+            query = f"SELECT COUNT(*) FROM eddiebauer WHERE price < {data['inputs'][i]}"
+        elif data['searchTypes'][i]=="feature":
+            query = f"SELECT COUNT(*) FROM eddiebauer WHERE path LIKE '%{data['inputs'][i]}%'"
+        else:
+            query = f"SELECT COUNT(*) FROM eddiebauer WHERE {data['searchTypes'][i]} LIKE '%{data['inputs'][i]}%'"
         cursor.execute(query)
-        search_res.append(cursor.fetchone())
+        search_res.append(cursor.fetchone()[0])
+
     conn.close()
-    color = colors[:len(data)]
+    color = colors[:len(data['inputs'])]
+    for i in range(len(data['inputs'])):
+        data['searchTypes'][i]+='：'
+        data['searchTypes'][i]+=str(data['inputs'][i])
     chart_ = {
         'labels': data['searchTypes'],
         'datasetLabel': "mychart",
