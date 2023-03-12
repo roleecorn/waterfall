@@ -137,22 +137,22 @@ async def search(data: dict):
         "#bcbd22",
         "#17becf"
     ]
-    search_res=[]
-    search_type=data['search_type']
+    search_res = []
+    search_type = data['search_type']
     for i in range(len(data['inputs'])):
-        company=data['searchCompanys'][i]
-        print(company)
+        company = data['searchCompanys'][i]
+        search_term = data['inputs'][i]
         conn = sqlite3.connect(f"{company}.db")
         cursor = conn.cursor()
-        query = f"SELECT COUNT(*) FROM {company} WHERE price < {data['inputs'][i]}"
-        if search_type=="cost":
-            query = f"SELECT COUNT(*) FROM {company} WHERE price < {data['inputs'][i]}"
-        elif search_type=="feature":
-            query = f"SELECT COUNT(*) FROM {company} WHERE path LIKE '%{data['inputs'][i]}%'"
-        elif search_type=="name":
-            query = f"SELECT COUNT(*) FROM {company} WHERE name LIKE '%{data['inputs'][i]}%'"
-        else :
-            pass
+        query = f"SELECT COUNT(*) FROM {company} WHERE price < {search_term}"
+        if search_type == "cost":
+            query = f"SELECT COUNT(*) FROM {company} WHERE price < {search_term}"
+        elif search_type == "feature":
+            query = f"SELECT COUNT(*) FROM {company} WHERE path LIKE '%{search_term}%'"
+        elif search_type == "name":
+            query = f"SELECT COUNT(*) FROM {company} WHERE name LIKE '%{search_term}%'"
+        else:
+            return
         cursor.execute(query)
         search_res.append(cursor.fetchone()[0])
         cursor.close()
@@ -163,7 +163,7 @@ async def search(data: dict):
         data['searchCompanys'][i]+=str(data['inputs'][i])
     chart_ = {
         'labels': data['searchCompanys'],
-        'datasetLabel': "mychart",
+        'datasetLabel': search_type,
         'data': search_res,
         'backgroundColor': color,
         'borderWidth': 1,
