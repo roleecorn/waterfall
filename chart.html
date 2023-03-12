@@ -4,15 +4,16 @@
     <!-- Chart.js v2.4.0 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script>
-        function search(container, searchTypes, inputs) {
+        function search(container, searchCompanys, inputs,search_type) {
             fetch("/search", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    "searchTypes": searchTypes,
-                    "inputs": inputs
+                    "searchCompanys": searchCompanys,
+                    "inputs": inputs,
+                    "search_type": search_type
                 })
             })
                 .then(response => response.json())
@@ -33,7 +34,7 @@
                                     borderWidth: c_data.borderWidth
                                 }
                             ],
-                            
+
                         },
                         options: {
                             animation: {
@@ -69,19 +70,19 @@
             float: left;
         }
     </style>
+    <script src="assets/js/get_all_db.js"></script>
 </head>
 
 <body>
-    <div id="searches">
-        <div class="search-block">
-            <select class="search-type">
-                <option value="name">Name</option>
-                <option value="cost">Cost</option>
-                <option value="feature">Feature</option>
-            </select>
-            <input type="text" class="input-field">
-        </div>
+    <div id="searchfor">
+        <select class="search-type">
+            <option value="name">name</option>
+            <option value="feature">feature</option>
+            <option value="cost">cost</option>
+        </select>
     </div>
+    </div>
+    <div id="searches"></div>
     <button id="add-button">Add</button>
     <button id="remove-button">Remove</button>
     <button id="go-search-button">Go Search</button>
@@ -93,22 +94,18 @@
         const removeButton = document.getElementById('remove-button');
         const goSearchButton = document.getElementById('go-search-button');
         const searchesDiv = document.getElementById('searches');
+        const searchBlock = document.createElement('div');
+        searchBlock.className = 'search-block';
+        get_dbs(searchBlock);
 
+        searchesDiv.appendChild(searchBlock);
         addButton.addEventListener('click', function () {
             const searchBlock = document.createElement('div');
             searchBlock.className = 'search-block';
-
-            const searchType = document.createElement('select');
-            searchType.className = 'search-type';
-            searchType.innerHTML = '<option value="name">Name</option><option value="cost">Cost</option><option value="feature">Feature</option>';
-            searchBlock.appendChild(searchType);
-
-            const inputField = document.createElement('input');
-            inputField.type = 'text';
-            inputField.className = 'input-field';
-            searchBlock.appendChild(inputField);
+            get_dbs(searchBlock);
 
             searchesDiv.appendChild(searchBlock);
+
         });
 
         removeButton.addEventListener('click', function () {
@@ -121,15 +118,18 @@
         goSearchButton.addEventListener('click', function () {
             const data = {};
             var inputFields = document.getElementsByClassName('search-block');
-            var searchTypes = [];
+            var input_type = document.getElementsByClassName('search-type');
+            console.log(input_type[0].value);
+            console.log(inputFields);
+            var searchCompanys = [];
             var inputs = [];
             for (var i = 0; i < inputFields.length; i++) {
-                searchTypes.push(inputFields[i].getElementsByClassName('search-type')[0].value);
+                searchCompanys.push(inputFields[i].getElementsByClassName('search-company')[0].value);
                 inputs.push(inputFields[i].getElementsByClassName('input-field')[0].value);
             }
-            console.log(searchTypes);
+            console.log(searchCompanys);
             console.log(inputs);
-            search(container, searchTypes, inputs);
+            search(container, searchCompanys, inputs,input_type[0].value);
 
         });
 

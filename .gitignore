@@ -5,6 +5,9 @@
 *.db
 *.tmp
 *.jpg
+*.rar
+*.zip
+*.png
 *.DS_Store
 __pycache__/
 *.zip

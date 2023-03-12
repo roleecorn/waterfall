@@ -3,10 +3,12 @@ from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 import sqlite3
 import pandas as pd
+import os
 app = FastAPI()  # 建立一個 Fast API application
 app.mount("/html5upphantom",
           StaticFiles(directory="html5upphantom"), name="html5upphantom")
-
+app.mount("/assets",
+          StaticFiles(directory="assets"), name="assets")
 
 @app.get("/")  # 指定 api 路徑 (get方法)
 def read_root():
@@ -30,10 +32,11 @@ def showchart(data: str = ""):
 
 @app.get("/dbs")
 def dbs():
-    data1 = {"name": "bottom", "src": "bottom"}
-    data2 = {"name": "Shirts", "src": "Shirts"}
-    data3 = {"name": "men", "src": "men"}
-    files = {"1": data1, "2": data2, "3": data3}
+    files = {}
+    for company in os.listdir("html5upphantom\images"):
+        if "." in company:
+            continue
+        files[company]={"name": company, "src": company}
     ret = {
         'status': True,
         'data': files
@@ -120,6 +123,8 @@ def count_test(search: str):
 
 @app.post("/search")
 async def search(data: dict):
+    print(data)
+    # return
     colors = [
         "#1f77b4",
         "#ff7f0e",
@@ -132,26 +137,32 @@ async def search(data: dict):
         "#bcbd22",
         "#17becf"
     ]
-    conn = sqlite3.connect("eddiebauer.db")
-    cursor = conn.cursor()
     search_res=[]
+    search_type=data['search_type']
     for i in range(len(data['inputs'])):
-        if data['searchTypes'][i]=="cost":
-            query = f"SELECT COUNT(*) FROM eddiebauer WHERE price < {data['inputs'][i]}"
-        elif data['searchTypes'][i]=="feature":
-            query = f"SELECT COUNT(*) FROM eddiebauer WHERE path LIKE '%{data['inputs'][i]}%'"
-        else:
-            query = f"SELECT COUNT(*) FROM eddiebauer WHERE {data['searchTypes'][i]} LIKE '%{data['inputs'][i]}%'"
+        company=data['searchCompanys'][i]
+        print(company)
+        conn = sqlite3.connect(f"{company}.db")
+        cursor = conn.cursor()
+        query = f"SELECT COUNT(*) FROM {company} WHERE price < {data['inputs'][i]}"
+        if search_type=="cost":
+            query = f"SELECT COUNT(*) FROM {company} WHERE price < {data['inputs'][i]}"
+        elif search_type=="feature":
+            query = f"SELECT COUNT(*) FROM {company} WHERE path LIKE '%{data['inputs'][i]}%'"
+        elif search_type=="name":
+            query = f"SELECT COUNT(*) FROM {company} WHERE name LIKE '%{data['inputs'][i]}%'"
+        else :
+            pass
         cursor.execute(query)
         search_res.append(cursor.fetchone()[0])
-
-    conn.close()
+        cursor.close()
+        conn.close()
     color = colors[:len(data['inputs'])]
     for i in range(len(data['inputs'])):
-        data['searchTypes'][i]+='：'
-        data['searchTypes'][i]+=str(data['inputs'][i])
+        data['searchCompanys'][i]+='：'
+        data['searchCompanys'][i]+=str(data['inputs'][i])
     chart_ = {
-        'labels': data['searchTypes'],
+        'labels': data['searchCompanys'],
         'datasetLabel': "mychart",
         'data': search_res,
         'backgroundColor': color,

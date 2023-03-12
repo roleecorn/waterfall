@@ -32,7 +32,7 @@ function search(container) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            "searchTypes": searchTypes,
+            "searchCompanys": searchCompanys,
             "inputs": inputs
         })
     })
