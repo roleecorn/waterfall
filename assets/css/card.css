@@ -1,0 +1,16 @@
+/* style.css */
+
+.w {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .item {
+    width: 25%;
+    float: left;
+  }
+  
+  .item img {
+    width: 100%;
+  }
+  
