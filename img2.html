@@ -13,7 +13,7 @@
         </script>
 
     <script>
-        function initImg(path = '/search_img/') {
+        function initImg(path = '/search_img/',shop='eddiebauer') {
             fetch(path, {
                 method: 'GET',
                 headers: {
@@ -29,7 +29,8 @@
                         var eqv = c % 4;
                         c = c + 1;
                         var tag = document.createElement('img');
-                        tag.src = "/html5upphantom/images/eddiebauer/" + v.path + '/' + v.imgcode + '.jpg';
+                        // const chartbox = document.getElementById("container");
+                        tag.src = "/html5upphantom/images/"+shop+"/" + v.path + '/' + v.imgcode ;
                         var word = document.createElement('div');
                         word.style = 'white-space: pre-line;'
                         word.innerHTML = '品名: ' + v.name + '<br>';
@@ -52,7 +53,7 @@
 </head>
 
 <body>
-    <label for="input-select">選擇特徵：</label>
+    <label for="input-select">選擇店家：</label>
     <select id="input-select" name="input" style="width: 800px" onchange="redirect()">
         <option value="none"> </option>
     </select><br>
@@ -104,14 +105,16 @@
                     $('#container').append(tag);
                 }
                 console.log(selectedValue);
-                got = "/search_img?feature=" + selectedValue
+                got = "/search_img?shop=" + selectedValue
                 console.log(got)
-                initImg(got);
+                initImg(got,selectedValue);
 
             }
         }
         function search(){
             var search_text = document.getElementById("search_input").value;
+            var select = document.getElementById("input-select");
+            var selectedValue = select.options[select.selectedIndex].value;
             console.log(search_text);
             for (let i = 0; i < 4; i++) {
                     $('#container').children().eq(0).remove();
@@ -122,9 +125,9 @@
                     tag.innerHTML = "第一行";
                     $('#container').append(tag);
                 }
-                got = "/search_img?name=" + search_text
+                got = "/search_img?name=" + search_text + "&shop=" +selectedValue;
                 console.log(got)
-                initImg(got);
+                initImg(path=got,shop=selectedValue);
         }
 
     </script>

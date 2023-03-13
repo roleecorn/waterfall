@@ -45,18 +45,18 @@ def dbs():
 
 
 @app.get("/search_img")
-def imgs(dbs: str = "", feature: str = "", name: str = ""):
-    status = sqlite3.connect("eddiebauer.db")
+def imgs(dbs: str = "", shop: str = "eddiebauer", name: str = ""):
+    status = sqlite3.connect(f"{shop}.db")
     if name:
         qry = f'''
-        SELECT * FROM eddiebauer  WHERE name LIKE '%{name}%';
+        SELECT * FROM {shop}  WHERE name LIKE '%{name}%';
         '''
-    elif feature:
-        qry = f'''
-        SELECT * FROM eddiebauer  WHERE path LIKE '%{feature}%';
-        '''
+    # elif feature:
+    #     qry = f'''
+    #     SELECT * FROM {shop}  WHERE path LIKE '%{feature}%';
+    #     '''
     else:
-        qry = "SELECT * FROM eddiebauer "
+        qry = f"SELECT * FROM {shop} "
 
     df = pd.read_sql_query(qry, status)
     result = df.to_dict('records')
