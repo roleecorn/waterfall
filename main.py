@@ -45,18 +45,28 @@ def dbs():
 
 
 @app.get("/search_img")
-def imgs(dbs: str = "", shop: str = "eddiebauer", name: str = ""):
+def imgs(dbs: str = "", shop: str = "eddiebauer",
+         name: str = "", ver: int = 0):
     status = sqlite3.connect(f"{shop}.db")
+    if not ver:
+        find_max_ver = f'''
+        SELECT MAX(ver)
+        FROM {shop}
+        '''
+        cursor = status.cursor()
+        cursor.execute(find_max_ver)
+        ver = cursor.fetchone()[0]
+        cursor.close()
     if name:
         qry = f'''
-        SELECT * FROM {shop}  WHERE name LIKE '%{name}%';
+        SELECT * FROM {shop}  WHERE name LIKE '%{name}%' AND ver = {ver};
         '''
     # elif feature:
     #     qry = f'''
     #     SELECT * FROM {shop}  WHERE path LIKE '%{feature}%';
     #     '''
     else:
-        qry = f"SELECT * FROM {shop} "
+        qry = f"SELECT * FROM {shop} WHERE ver = {ver} LIMIT 3000"
 
     df = pd.read_sql_query(qry, status)
     result = df.to_dict('records')
