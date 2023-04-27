@@ -35,7 +35,7 @@
                         word.style = 'white-space: pre-line;'
                         word.innerHTML = '品名: ' + v.name + '<br>';
                         word.innerHTML += '金額: ' + v.price + '<br>';
-                        
+                        tmp = 'Other';
                         if (v.gender === 0) {
                             tmp = 'Female';
                         }
@@ -122,7 +122,7 @@
                 for (let i = 0; i < 4; i++) {
                     var tag = document.createElement("div");
                     tag.className = "item";
-                    tag.innerHTML = "第一行";
+                    tag.innerHTML = "第"+i+"行";
                     $('#container').append(tag);
                 }
                 got = "/search_img?name=" + search_text + "&shop=" +selectedValue;
