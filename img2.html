@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/card.css">
 
     <!-- 取得所有網站列表 -->
-    <script src="/html5upphantom/assets/js/get_all_db.js"></script>
+    <script src="/assets/js/get_all_db.js"></script>
     <script language="JavaScript" type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.2.6/jquery.min.js">
         </script>
@@ -30,7 +30,8 @@
                         c = c + 1;
                         var tag = document.createElement('img');
                         // const chartbox = document.getElementById("container");
-                        tag.src = "/html5upphantom/images/"+shop+"/" + v.path + '/' + v.imgcode ;
+                        // tag.src = "/image/"+shop+"/" + v.path + '/' + v.imgcode ;
+                        tag.src = v.src;
                         var word = document.createElement('div');
                         word.style = 'white-space: pre-line;'
                         word.innerHTML = '品名: ' + v.name + '<br>';

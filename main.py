@@ -3,12 +3,35 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 import sqlite3
 import pandas as pd
-import os
+from pathlib import Path
+from datetime import datetime
+home = Path.cwd()
 app = FastAPI()  # 建立一個 Fast API application
-app.mount("/html5upphantom",
-          StaticFiles(directory="html5upphantom"), name="html5upphantom")
+app.mount("/image",
+          StaticFiles(directory="image"), name="image")
 app.mount("/assets",
           StaticFiles(directory="assets"), name="assets")
+shops_db = [file.stem for file in (
+    home / 'sql').iterdir() if file.is_file() and file.suffix == '.db']
+
+
+def data_format(df: pd.DataFrame, shop: str = None):
+    if not shop:
+        raise ValueError
+    df['date'] = df['ver'].apply(
+        lambda x: datetime.fromtimestamp(x).date())
+
+    df['src'] = df.apply(
+        lambda row: f"/image/{shop}/{row['date']}/{row['path']}/{row['imgcode']}",
+        axis=1)
+
+    cols_to_drop = [
+        'path',
+        'imgcode',
+        'date',
+        'ver',
+    ]
+    df.drop(cols_to_drop, axis=1, inplace=True)
 
 
 @app.get("/")  # 指定 api 路徑 (get方法)
@@ -33,10 +56,9 @@ def showwaterfall(data: str = ""):
 
 @app.get("/dbs")
 def dbs():
+    global shops_db
     files = {}
-    for company in os.listdir("html5upphantom\images"):
-        if "." in company:
-            continue
+    for company in shops_db:
         files[company] = {"name": company, "src": company}
     ret = {
         'status': True,
@@ -46,9 +68,13 @@ def dbs():
 
 
 @app.get("/search_img")
-def imgs(dbs: str = "", shop: str = "eddiebauer",
-         name: str = "", ver: int = 0):
-    status = sqlite3.connect(f"{shop}.db")
+def imgs(shop: str = "eddiebauer",
+         name: str = None,
+         ver: int = None,
+         price_min: float = None,
+         price_max: float = None
+         ):
+    status = sqlite3.connect(home / "sql" / f"{shop}.db")
     if not ver:
         find_max_ver = f'''
         SELECT MAX(ver)
@@ -58,18 +84,16 @@ def imgs(dbs: str = "", shop: str = "eddiebauer",
         cursor.execute(find_max_ver)
         ver = cursor.fetchone()[0]
         cursor.close()
+    query = f"SELECT * FROM {shop} WHERE ver={ver}"
     if name:
-        qry = f'''
-        SELECT * FROM {shop}  WHERE name LIKE '%{name}%' AND ver = {ver};
-        '''
-    # elif feature:
-    #     qry = f'''
-    #     SELECT * FROM {shop}  WHERE path LIKE '%{feature}%';
-    #     '''
-    else:
-        qry = f"SELECT * FROM {shop} WHERE ver = {ver} LIMIT 3000"
-
-    df = pd.read_sql_query(qry, status)
+        query += f" AND name LIKE '%{name}%'"
+    if price_min:
+        query += f" AND price >= {price_min}"
+    if price_max:
+        query += f" AND price <= {price_max}"
+    query += " LIMIT 3000"
+    df = pd.read_sql_query(query, status)
+    data_format(df=df, shop=shop)
     result = df.to_dict('records')
     status.close()
     tmp = 0

@@ -2,7 +2,7 @@ import sqlite3
 import re
 
 # 連接到您的資料庫
-conn = sqlite3.connect('html5upphantom\images\hackett\hackett.db')
+conn = sqlite3.connect('sql/eddiebauer.db')
 c = conn.cursor()
 
 # # 獲取含有貨幣內容的列
@@ -14,7 +14,7 @@ c = conn.cursor()
 #     new_price = re.sub('[^\d.]', '', price) # 使用正則表達式刪除非數字和小數點的字符
 #     imgcode=row[1]
 #     c.execute("UPDATE hackett SET oriprice = ? WHERE imgcode = ?", (new_price, imgcode)) # 將修正後的值更新到資料庫
-c.execute("UPDATE hackett SET oriprice = oriprice * 1000")
+c.execute("UPDATE eddiebauer SET ver = 0")
 # 提交更改
 conn.commit()
 
