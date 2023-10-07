@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>waterflow</title>
+        <link rel="stylesheet" type="text/css" href="/assets/css/card.css">
+
+        <!-- 取得所有網站列表 -->
+        <script src="/assets/js/get_all_db.js"></script>
+        <script src="/assets/js/find_img.js"></script>
+        <script src="/assets/js/reset_container.js"></script>
+        <script language="JavaScript" type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.2.6/jquery.min.js">
+        </script>
+        <script>
+            // global變數
+            var currentPage = 1;
+            var currentUrl = "/search_img?Not_use=1";
+        </script>
+    </head>
+
+    <body>
+        <label for="input-select">選擇店家：</label>
+        <select id="input-select" name="input" style="width: 800px"
+            onchange="redirect()">
+            <option value="none"> </option>
+        </select><br>
+        <form>
+            <label for="input-select">名稱搜尋：</label>
+            <input type="text" id="search_input" style="width: 800px"
+                placeholder="輸入文字">
+            <button type="button" onclick="search()">搜尋</button>
+        </form>
+
+        <div>衣服</div>
+        <div class="w" id="container">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div id="rightArrow" onclick="handleArrowClick()">➔</div>
+        <div id="leftArrow" onclick="handleLeftArrowClick()">🠔</div>
+        <script>
+
+        $(function () {
+            var path = '/search_img/';
+            dbs();
+            initImg(path);
+        });
+        NID = 0;
+        // 重新導向，移除所有的圖片並重新取得，dbs會重新拿參數
+        function redirect() {
+            var select = document.getElementById("input-select");
+            var selectedValue = select.options[select.selectedIndex].value;
+            if (selectedValue == "none") {
+                return
+            } else {
+                path = "new";
+                reset_container();
+                console.log(selectedValue);
+                got = "/search_img?shop=" + selectedValue
+                console.log(got);
+                currentPage =1;
+                currentUrl = got;
+                initImg(got,selectedValue);
+
+            }
+        }
+        function search(){
+            var search_text = document.getElementById("search_input").value;
+            var select = document.getElementById("input-select");
+            var selectedValue = select.options[select.selectedIndex].value;
+            console.log(search_text);
+            reset_container();
+            got = "/search_img?name=" + search_text + "&shop=" +selectedValue;
+            console.log(got)
+            currentPage = 1;
+            currentUrl = got;
+            initImg(path=got,shop=selectedValue);
+        }
+        function handleArrowClick(){
+            reset_container();
+            got = currentUrl;
+            currentPage = currentPage+1;
+            got = got +"&page=" + currentPage;
+            initImg(path=got);
+        }
+        function handleLeftArrowClick(){
+            reset_container();
+            got = currentUrl;
+            currentPage = currentPage-1;
+            got = got +"&page=" + currentPage;
+            initImg(path=got);
+        }
+
+    </script>
+    </body>
+
+</html>
