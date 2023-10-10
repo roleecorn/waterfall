@@ -16,6 +16,19 @@ app.mount("/template",
 shops_db = [file.stem for file in (
     home / 'sql').iterdir() if file.is_file() and file.suffix == '.db']
 
+COLORS = (
+    "#1f77b4",
+    "#ff7f0e",
+    "#2ca02c",
+    "#d62728",
+    "#9467bd",
+    "#8c564b",
+    "#e377c2",
+    "#7f7f7f",
+    "#bcbd22",
+    "#17becf"
+)
+
 
 def data_format(df: pd.DataFrame, shop: str = None):
     if not shop:
@@ -26,7 +39,8 @@ def data_format(df: pd.DataFrame, shop: str = None):
         lambda x: datetime.fromtimestamp(x).date())
 
     df['src'] = df.apply(
-        lambda row: f"/image/{shop}/{row['date']}/{row['path']}/{row['imgcode']}",
+        lambda row: "/image/{}/{}/{}/{}".format(
+            shop, row['date'], row['path'], row['imgcode']),
         axis=1)
 
     cols_to_drop = [
@@ -126,19 +140,7 @@ def imgs(shop: str = "eddiebauer",
 
 @app.post("/search")
 async def search(data: dict):
-    print(data)
-    colors = [
-        "#1f77b4",
-        "#ff7f0e",
-        "#2ca02c",
-        "#d62728",
-        "#9467bd",
-        "#8c564b",
-        "#e377c2",
-        "#7f7f7f",
-        "#bcbd22",
-        "#17becf"
-    ]
+    global COLORS
     search_res = []
     search_type = data['search_type']
     for i in range(len(data['inputs'])):
@@ -160,7 +162,7 @@ async def search(data: dict):
         search_res.append(cursor.fetchone()[0])
         cursor.close()
         conn.close()
-    color = colors[:len(data['inputs'])]
+    color = COLORS[:len(data['inputs'])]
     for i in range(len(data['inputs'])):
         data['searchCompanys'][i] += '：'
         data['searchCompanys'][i] += str(data['inputs'][i])
